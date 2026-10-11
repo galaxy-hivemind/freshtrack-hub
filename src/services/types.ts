@@ -21,6 +21,7 @@ export interface FoodSafetyService {
  getScanById(id: string): Promise<ScanRecord>;
  startScan(image?: string): Promise<ScanRecord>;
  reanalyzeScan(id: string): Promise<ScanRecord>;
+ simulateAnalysisFailure(id: string): Promise<ScanRecord>;
  getDateCandidates(scanId: string): Promise<DateCandidate[]>;
  confirmDate(scanId: string, candidateId: string): Promise<Product>;
  correctScan(scanId: string, data: ProductInput): Promise<Product>;
