@@ -27,7 +27,7 @@ export function AppShell({children}:{children:ReactNode}) {
 }
 export function PageIntro({title,description,children}:{title:string;description:string;children?:ReactNode}){return <div className="page-intro"><div><h1>{title}</h1><p>{description}</p></div>{children && <div className="intro-actions">{children}</div>}</div>;}
 export function ProductCell({product}:{product:Pick<Product,'image'|'name'|'brand'>}){return <div className="product-cell"><img src={product.image} width={41} height={45} alt="" className="product-thumb" loading="lazy"/><div><div className="product-name">{product.name}</div><div className="product-brand">{product.brand || 'No brand specified'}</div></div></div>;}
-export function StatusBadge({status}:{status:ProductStatus | 'Successful' | 'Failed' | 'Confirmed'}){
+export function StatusBadge({status}:{status:ProductStatus | 'Successful' | 'Failed' | 'Confirmed' | 'Analyzing'}){
  const danger=['Expired','Best Before Passed','Failed'].includes(status);const warn=['Needs Review','Expires Today','Expiring Soon','Best Before Today','Best Before Soon'].includes(status);const neutral=['Unknown','Manufactured','Packed'].includes(status);const Icon=danger?TriangleAlert:warn?Clock:neutral?CalendarDays:CircleCheck;
  return <span className={`status status-${danger?'danger':warn?'warning':neutral?'neutral':'safe'}`}><Icon/>{status}</span>;
 }
@@ -36,5 +36,5 @@ export function ProductBadge({product}:{product:Product}){const {data:settings}=
 export function PanelHead({title,subtitle,children}:{title:ReactNode;subtitle?:string;children?:ReactNode}){return <div className="panel-head"><div><h2>{title}</h2>{subtitle && <p>{subtitle}</p>}</div>{children}</div>;}
 export function Loading(){return <div className="loading"><LoaderCircle size={20} className="animate-spin"/>Loading your workspace…</div>;}
 export function Empty({title,message,children}:{title:string;message:string;children?:ReactNode}){return <div className="empty-state"><Package size={32}/><h3>{title}</h3><p className="text-xs mb-4">{message}</p>{children}</div>;}
-export function ErrorState({error,retry}:{error:Error;retry:()=>void}){return <div className="empty-state"><TriangleAlert size={30}/><h3>Something didn’t load</h3><p className="mb-4">{error.message}</p><Button variant="outline" onClick={retry}>Try again</Button></div>;}
+export function ErrorState({error,retry}:{error:unknown;retry:()=>void}){return <div className="empty-state"><TriangleAlert size={30}/><h3>Something didn’t load</h3><p className="mb-4">{error instanceof Error?error.message:'Please try again.'}</p><Button variant="outline" onClick={retry}>Try again</Button></div>;}
 export function Footer(){return <footer className="footer-note"><span><Shield size={12}/>Dates inform decisions. Always check the packaging and product condition.</span><span><FlaskConical size={12}/>Demo mode · Data resets on refresh</span></footer>;}

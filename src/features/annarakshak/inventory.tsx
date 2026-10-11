@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useSearch } from '@tanstack/react-router';
 import { Plus, Search, Eye, Pencil, Trash2, SlidersHorizontal } from 'lucide-react';
@@ -11,6 +11,7 @@ import { ProductDialog, type ProductDialogMode } from './product-dialog';
 export function Inventory(){
  const {data}=useSuspenseQuery(productsQuery);const {data:settings}=useSuspenseQuery(settingsQuery);const search=useSearch({from:'/inventory'});
  const initialCategory=categories.find(c=>c===search.q);const [query,setQuery]=useState(initialCategory?'':search.q);const [category,setCategory]=useState<string>(initialCategory || 'All categories');const [status,setStatus]=useState('All date statuses');const [sort,setSort]=useState('Date: earliest first');const [dialog,setDialog]=useState<ProductDialogMode>();
+ useEffect(()=>{const c=categories.find(c=>c===search.q);setCategory(c || 'All categories');setQuery(c?'':search.q);},[search.q]);
  let rows=data.filter(p=>(!query || `${p.name} ${p.brand}`.toLowerCase().includes(query.toLowerCase())) && (category==='All categories'||p.category===category) && (status==='All date statuses'||productStatus(p,settings.alertWindow)===status));
  rows=[...rows].sort((a,b)=>sort==='Product name'?a.name.localeCompare(b.name):sort==='Date status'?productStatus(a,settings.alertWindow).localeCompare(productStatus(b,settings.alertWindow)):(a.verified && a.date?daysFromToday(a.date):Infinity)-(b.verified && b.date?daysFromToday(b.date):Infinity));
  const statuses=['All date statuses','Expired','Expires Today','Expiring Soon','Upcoming','Best Before Passed','Best Before Today','Best Before Soon','Best Before Future','Needs Review','Unknown','Manufactured','Packed'];
