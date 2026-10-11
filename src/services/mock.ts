@@ -36,7 +36,7 @@ export const mockService: FoodSafetyService = {
  async getDateCandidates(id){await delay();return copy(requireScan(id).candidates);},
  async simulateAnalysisFailure(id){await delay();const s=requireScan(id);s.analysisStatus='Failed';s.reason='Failed analysis';s.candidates=[];return copy(s);},
  async confirmDate(id,candidateId){await delay();const s=requireScan(id);if(s.productId)return copy(requireProduct(s.productId));const c=s.candidates.find(c=>c.id===candidateId);if(!c || c.precision!=='day' || !isExactDate(c.date))throw new Error('This evidence has no exact date. Enter a full date from the package, or leave it in review.');const p=create({name:s.name,brand:s.brand,category:s.category,quantity:'',date:c.date,dateType:c.dateType,notes:`Original evidence: ${c.printedText}`,verified:true});p.scanId=id;s.productId=p.id;s.reviewStatus='Confirmed';return copy(p);},
- async correctScan(id,data){await delay();const s=requireScan(id);if(!data.verified)throw new Error('Explicit date confirmation is required.');const p=s.productId?requireProduct(s.productId):create(data);Object.assign(p,data);p.scanId=id;s.productId=p.id;s.reviewStatus='Confirmed';return copy(p);},
+ async correctScan(id,data){await delay();const s=requireScan(id);if(!data.verified)throw new Error('Explicit date confirmation is required.');validate(data);const p=s.productId?requireProduct(s.productId):create(data);Object.assign(p,data);p.scanId=id;s.productId=p.id;s.reviewStatus='Confirmed';return copy(p);},
  async getSettings(){await delay();return copy(settings);},
  async updateSettings(data){await delay();if(data.alertWindow<1 || data.alertWindow>30)throw new Error('Choose between 1 and 30 days.');settings=copy(data);return copy(settings);},
 };
