@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useRef, type ReactNode } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { Shield, Leaf, LayoutDashboard, Package, ScanLine, History, CircleHelp, Settings, Bell, Search, ChevronDown, Menu, X, ArrowRight, FlaskConical, House, CircleCheck, Clock, TriangleAlert, LoaderCircle, CalendarDays } from 'lucide-react';
@@ -9,10 +9,10 @@ import { displayDate, productStatus } from '@/services/dates';
 import type { Product, ProductStatus } from '@/services/types';
 const nav = [{to:'/',name:'Dashboard',icon:LayoutDashboard},{to:'/inventory',name:'My Inventory',icon:Package},{to:'/scan',name:'Scan Product',icon:ScanLine},{to:'/history',name:'Scan History',icon:History},{to:'/review',name:'Needs Review',icon:CircleHelp},{to:'/settings',name:'Settings',icon:Settings}] as const;
 export function AppShell({children}:{children:ReactNode}) {
- const pathname=useRouterState({select:s=>s.location.pathname}); const [menu,setMenu]=useState(false);const [search,setSearch]=useState(false);const [query,setQuery]=useState('');const [results,setResults]=useState<Product[]>([]);const [searching,setSearching]=useState(false);
+ const pathname=useRouterState({select:s=>s.location.pathname}); const [menu,setMenu]=useState(false);const [search,setSearch]=useState(false);const [query,setQuery]=useState('');const [results,setResults]=useState<Product[]>([]);const [searching,setSearching]=useState(false);const searchSequence=useRef(0);
  const {data:settings}=useQuery(settingsQuery);const {data:scans}=useQuery(scansQuery);const count=scans?.filter(s=>s.reviewStatus==='Needs Review').length || 0;
  const title=nav.find(n=>n.to===pathname)?.name || 'AnnaRakshak';
- async function find(value:string){setQuery(value);setSearching(true);const all=await service.getProducts();setResults(all.filter(p=>`${p.name} ${p.brand}`.toLowerCase().includes(value.toLowerCase())));setSearching(false);}
+ async function find(value:string){const run=++searchSequence.current;setQuery(value);setSearching(true);const all=await service.getProducts();if(run!==searchSequence.current)return;setResults(all.filter(p=>`${p.name} ${p.brand}`.toLowerCase().includes(value.toLowerCase())));setSearching(false);}
  return <div className={`app-shell ${settings?.compact?'compact':''}`}>
  {menu && <div className="sidebar-backdrop" onClick={()=>setMenu(false)} />}
  <aside className={`sidebar ${menu?'open':''}`}>
