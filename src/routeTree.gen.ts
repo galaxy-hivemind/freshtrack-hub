@@ -15,6 +15,8 @@ import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as ScanRouteImport } from './routes/scan'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as TimelineRouteImport } from './routes/timeline'
+import { Route as WasteRouteImport } from './routes/waste'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +48,16 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WasteRoute = WasteRouteImport.update({
+  id: '/waste',
+  path: '/waste',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +66,8 @@ export interface FileRoutesByFullPath {
   '/review': typeof ReviewRoute
   '/scan': typeof ScanRoute
   '/settings': typeof SettingsRoute
+  '/timeline': typeof TimelineRoute
+  '/waste': typeof WasteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +76,8 @@ export interface FileRoutesByTo {
   '/review': typeof ReviewRoute
   '/scan': typeof ScanRoute
   '/settings': typeof SettingsRoute
+  '/timeline': typeof TimelineRoute
+  '/waste': typeof WasteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +87,30 @@ export interface FileRoutesById {
   '/review': typeof ReviewRoute
   '/scan': typeof ScanRoute
   '/settings': typeof SettingsRoute
+  '/timeline': typeof TimelineRoute
+  '/waste': typeof WasteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/history' | '/inventory' | '/review' | '/scan' | '/settings'
+  fullPaths:
+    | '/'
+    | '/history'
+    | '/inventory'
+    | '/review'
+    | '/scan'
+    | '/settings'
+    | '/timeline'
+    | '/waste'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/history' | '/inventory' | '/review' | '/scan' | '/settings'
+  to:
+    | '/'
+    | '/history'
+    | '/inventory'
+    | '/review'
+    | '/scan'
+    | '/settings'
+    | '/timeline'
+    | '/waste'
   id:
     | '__root__'
     | '/'
@@ -85,6 +119,8 @@ export interface FileRouteTypes {
     | '/review'
     | '/scan'
     | '/settings'
+    | '/timeline'
+    | '/waste'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +130,8 @@ export interface RootRouteChildren {
   ReviewRoute: typeof ReviewRoute
   ScanRoute: typeof ScanRoute
   SettingsRoute: typeof SettingsRoute
+  TimelineRoute: typeof TimelineRoute
+  WasteRoute: typeof WasteRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +178,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/waste': {
+      id: '/waste'
+      path: '/waste'
+      fullPath: '/waste'
+      preLoaderRoute: typeof WasteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,6 +202,8 @@ const rootRouteChildren: RootRouteChildren = {
   ReviewRoute: ReviewRoute,
   ScanRoute: ScanRoute,
   SettingsRoute: SettingsRoute,
+  TimelineRoute: TimelineRoute,
+  WasteRoute: WasteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
