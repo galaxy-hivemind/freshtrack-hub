@@ -9,3 +9,4 @@ export const dashboardQuery = queryOptions({queryKey:['dashboard'],queryFn:()=>s
 export const productsQuery = queryOptions({queryKey:['products'],queryFn:()=>service.getProducts()});
 export const scansQuery = queryOptions({queryKey:['scans'],queryFn:()=>service.getScanHistory()});
 export const settingsQuery = queryOptions({queryKey:['settings'],queryFn:()=>service.getSettings()});
+export const wasteQuery = queryOptions({queryKey:['waste'],queryFn:()=>service.getWasteJournal()});
