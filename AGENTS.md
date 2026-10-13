@@ -13,3 +13,4 @@
 - Use the FoodSafetyService interface behind a central apiConfig and explicitly demo-only adapter; a configured URL alone must never imply live analysis or persistence.
 - Use TanStack Query for shared service reads and invalidate queries after changes so inventory, review counts, history, and dashboard remain synchronized.
 - Use dedicated file routes for all main navigation destinations and shared app chrome in the root route so deep links remain usable.
+- App chrome is a top navigation bar in AppShell (primary links plus a 'Scans & more' menu); keeps every route reachable without a sidebar.
